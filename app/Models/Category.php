@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static create(array $data)
+ */
 class Category extends Model
 {
     use HasFactory;
@@ -14,7 +17,7 @@ class Category extends Model
         'name',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function collections(): HasMany
     {
