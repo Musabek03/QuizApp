@@ -6,21 +6,23 @@ use App\Models\Category;
 use App\Services\BaseService;
 use Illuminate\Validation\ValidationException;
 
-class StoreCategory extends BaseService
+class DestroyCategory extends BaseService
 {
     public function rules(): array
     {
         return [
-            'name'=> 'required|unique:categories,name',
+            'id'=> 'required|exists:categories,id'
         ];
     }
 
     /**
      * @throws ValidationException
      */
-    public function execute(array $data): Category
+    public function execute(array $data): bool
     {
         $this->validate($data);
-        return Category::create($data);
+        $category = Category::find($data['id']);
+        $category->delete();
+        return true;
     }
 }
