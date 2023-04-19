@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Category\UpdateResource;
 use App\Models\Category;
+use App\Models\User;
+use App\Services\Category\DeleteCategory;
+use App\Services\Category\ShowCategory;
 use App\Services\Category\StoreCategory;
+use App\Services\Category\UpdateCategory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
+use PhpParser\Node\Scalar\String_;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
 
 class CategoryController extends Controller
 {
@@ -15,8 +25,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
+
         $categories = Category::all();
-        return CategoryResource::collection($categories);
+        return  CategoryResource::collection($categories);
     }
 
     /**
@@ -37,22 +48,58 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $categories = app(ShowCategory::class)->execute([
+                'id'=>$id
+            ]);
+            return new CategoryResource($categories);
+        }
+        catch (ModelNotFoundException){
+            return response([
+                'error'=> 'Category not found'
+            ], 404);
+
+        }
+
+
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, String $id):Response|CategoryResource
     {
-        //
+        try {
+            $categories = app(UpdateCategory::class)->execute([
+            'id'=>$id,
+            'name'=>$request->name
+            ]);
+            return new CategoryResource($categories);
+        }catch (ValidationException $exception){
+            return $exception->validator->errors()->all();
+        }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete( String $id)
     {
-        //
+
+        try {
+            $categories = app(DeleteCategory::class)->execute([
+                'id'=>$id
+            ]);
+            return response(
+                [
+                    'successful'=>true
+                ]);
+
+        }catch (ValidationException $a){
+return response("Bunday id li categoriya tabilmadi");
+        }
+
     }
 }

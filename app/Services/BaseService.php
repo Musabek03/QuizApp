@@ -20,4 +20,5 @@ abstract class BaseService
         Validator::make($data, $this->rules())->validate();
         return true;
     }
+
 }
