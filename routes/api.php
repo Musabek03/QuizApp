@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,4 +14,5 @@ Route::prefix('/categories')
         Route::delete('/delete/{category}', [CategoryController::class, 'delete']);
         Route::get('/show/{id}', [CategoryController::class, "show"]);
     });
+Route::post('register', [UserController::class, "store"]);
 
