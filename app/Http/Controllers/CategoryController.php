@@ -8,11 +8,13 @@ use App\Http\Resources\Category\UpdateResource;
 use App\Models\Category;
 use App\Models\User;
 use App\Services\Category\DeleteCategory;
+use App\Services\Category\IndexCategory;
 use App\Services\Category\ShowCategory;
 use App\Services\Category\StoreCategory;
 use App\Services\Category\UpdateCategory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use PhpParser\Node\Scalar\String_;
@@ -23,11 +25,12 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
 
-        $categories = Category::all();
-        return  CategoryResource::collection($categories);
+
+        $categories = app(IndexCategory::class)->execute([]);
+        return CategoryResource::collection($categories);
     }
 
     /**
