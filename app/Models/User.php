@@ -37,4 +37,19 @@ class User extends Authenticatable
             set: fn(string $value) => Hash::make($value),
         );
     }
+
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => ucfirst($value),
+            set: fn(string $value) => strtolower($value),
+        );
+    }
+
+    protected function nameAndPhone(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->name.' '.$this->phone,
+        );
+    }
 }
