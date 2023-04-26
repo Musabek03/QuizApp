@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Category\CategoryResource;
-use App\Models\Category;
 use App\Services\Category\DestroyCategory;
 use App\Services\Category\IndexCategory;
 use App\Services\Category\ShowCategory;

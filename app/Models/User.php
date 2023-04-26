@@ -18,6 +18,7 @@ class User extends Authenticatable
         'name',
         'phone',
         'password',
+        'email',
         'is_premium',
         'is_admin',
     ];
@@ -49,7 +50,7 @@ class User extends Authenticatable
     protected function nameAndPhone(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->name.' '.$this->phone,
+            get: fn() => $this->name . ' ' . $this->phone,
         );
     }
 }
