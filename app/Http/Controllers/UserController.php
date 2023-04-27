@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Category\UserResource;
+use App\Services\User\Login;
 use App\Services\User\Register;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+
 
 class UserController extends Controller
 {
@@ -20,30 +22,66 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function register(Request $request)
     {
         try {
-        $register = app(Register::class)->execute([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'password' => $request->password,
-            'is_premium' => $request->is_premium,
-            'is_admin' => $request->is_admin
-        ]);
-    return  new UserResource($register);
-        }
-        catch (ValidationException $exception)
+            [$user , $token] = app(Register::class)->execute($request->all());
+            return response([
+                'data'=> [
+                    'id'=>$user->id,
+                    'name' => $user->name,
+                    'phone' =>$user->phone,
+                    'email' => $user->email,
+                    'token' =>$token,
+                ]
+            ]);
+        }catch ( ValidationException $exception)
         {
-            return $exception->validator->errors()->all();
+        return response([
+            'errors' =>$exception->validator->errors()->all()
+        ], 422);
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+
+        $user = Auth::user();
+        return response([
+            'id' => $user->id,
+            'name' => $user->name,
+            'phone' => $user->phone,
+            'email' => $user->email,
+            'nameAndPhone' => $user->nameAndPhone
+        ]);
+    }
+
+    public function signIn(Request $request)
+    {
+        try {
+            [$user, $token, $role] = app(Login::class)->execute($request->all());
+            return [
+                'data' => [
+                    'user' => $user,
+                    'token' => $token,
+                    'role' => $role,
+
+                ]
+            ];
+        } catch (ValidationException $exception) {
+            return response([
+                'errors' => $exception->validator->errors()->all()
+            ], 422);
+        } catch (\Exception $exception) {
+            if ($exception->getCode() == 401) {
+                return response([
+                    'error' => $exception->getMessage()
+                ], $exception->getCode());
+            }
+        }
     }
 
     /**

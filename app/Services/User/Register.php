@@ -15,9 +15,8 @@ class Register extends BaseService
         return [
             'name'=> 'required',
             'phone' => 'required|unique:users,phone',
+            'email' => 'nullable|unique:users,email',
             'password'=> 'required',
-            'is_premium' => 'required',
-            'is_admin'=> 'required'
 
         ];
     }
@@ -25,17 +24,20 @@ class Register extends BaseService
     /**
      * @throws ValidationException
      */
-    public function execute(array $data): User
+    public function execute(array $data): array
     {
         $this->validate($data);
-        return User::create([
-            'name' =>$data['name'],
-            'phone' =>$data['phone'],
-            'password'=>Hash::make($data['password']),
-                'is_premium'=> $data['is_premium'],
-                'is_admin'=>$data['is_admin']
+        $user = User::create([
+            'name'=> $data['name'],
+            'phone'=> $data['phone'],
+            'email'=> $data['email'],
+            'password'=> $data['password'],
+            'is_premium'=> false,
+            'is_admin'=> false,
         ]);
-
-
+        $token = $user->createToken('user model', ['user'])->plainTextToken;
+        return [$user, $token];
     }
+
+
 }

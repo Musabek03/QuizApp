@@ -18,6 +18,7 @@ class User extends Authenticatable
         'name',
         'phone',
         'password',
+        'email',
         'is_premium',
         'is_admin',
     ];
