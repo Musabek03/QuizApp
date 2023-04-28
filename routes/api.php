@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/random-code', TestController::class);
 
 Route::middleware(['guest'])->group(function () {
-    Route::post('/singUp', [UserController::class, 'register']);
-    Route::post('/singIn', [UserController::class, 'singIn']);
+    Route::post('/signUp', [UserController::class, 'register']);
+    Route::post('/signIn', [UserController::class, 'signIn']);
 });
 
 

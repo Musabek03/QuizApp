@@ -56,7 +56,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function singIn(Request $request)
+    public function signIn(Request $request)
     {
         try {
             [$user, $token, $role] = app(UserLogin::class)->execute($request->all());

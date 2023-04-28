@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Collection\CollectionCollection;
+use App\Http\Resources\Collection\CollectionResource;
 use App\Http\Resources\Collection\CollectionWithQuestionsResource;
+use App\Services\Collection\DestroyCollection;
 use App\Services\Collection\IndexCollection;
 use App\Services\Collection\ShowCollection;
 use App\Services\Collection\StoreCollection;
+use App\Services\Collection\UpdateCollection;
 use App\Traits\JsonRespondController;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -69,8 +72,17 @@ class CollectionController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
+    {try {
+        $category = app(UpdateCollection::class)->execute([
+            'id'=> $id,
+            'name'=> $request->name,
+            'description' =>$request->description
+        ]);
+        return new CollectionResource($category);
+    }catch (ValidationException $exception) {
+        return $this->respondValidatorFailed($exception->validator);
+
+    }
     }
 
     /**
@@ -78,6 +90,16 @@ class CollectionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
-    }
-}
+        try {
+            $category = app(DestroyCollection::class)->execute([
+                'id'=> $id,
+            ]);
+            return response([
+                'successful'=> true
+            ]);
+        }
+        catch (ValidationException $exception) {
+            return $this->respondValidatorFailed($exception->validator);
+
+        }
+}}
