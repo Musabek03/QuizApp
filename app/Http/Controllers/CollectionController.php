@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Collection\CollectionCollection;
+use App\Http\Resources\Collection\CollectionResource;
 use App\Http\Resources\Collection\CollectionWithQuestionsResource;
+use App\Services\Collection\DestroyCollection;
 use App\Services\Collection\IndexCollection;
 use App\Services\Collection\ShowCollection;
 use App\Services\Collection\StoreCollection;
+use App\Services\Collection\UpdateCollection;
 use App\Traits\JsonRespondController;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,6 +19,7 @@ use Illuminate\Validation\ValidationException;
 
 class CollectionController extends Controller
 {
+    use JsonRespondController;
     /**
      * Display a listing of the resource.
      */
@@ -67,7 +71,18 @@ class CollectionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $collection = app(UpdateCollection::class)->execute([
+                'id'=>$id,
+                'name'=>$request->name,
+                'description' => $request->description
+
+            ]);
+            return new CollectionResource($collection);
+        }catch (Exception $exception){
+            $this->setHTTPStatusCode($exception->getCode());
+            return $this->respondWithError($exception->getMessage());
+        }
     }
 
     /**
@@ -75,6 +90,17 @@ class CollectionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $collection = app(DestroyCollection::class)->execute([
+                'id'=>$id
+            ]);
+            return response(
+                [
+                    'successful'=>true
+                ]);
+
+        }catch (ValidationException $a){
+            return response("Bunday id li collection tabilmadi");
+        }
     }
 }

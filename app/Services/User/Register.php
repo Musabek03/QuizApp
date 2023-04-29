@@ -2,9 +2,12 @@
 
 namespace App\Services\User;
 
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use App\Services\BaseService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class Register extends BaseService
@@ -36,7 +39,15 @@ class Register extends BaseService
             'is_admin'=> false,
         ]);
         $token = $user->createToken('user model', ['user'])->plainTextToken;
-        return [$user, $token];
+
+        $userCode = Mail::to($data['email'])->send(
+            new WelcomeMail([
+                'name'=> 'Musabekten salem',
+              $code =  'code'=> rand(111111, 999999)
+            ])
+        );
+
+        return [$user, $token, $userCode];
     }
 
 
