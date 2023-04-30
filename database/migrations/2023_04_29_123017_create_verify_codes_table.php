@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('verify_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained('users');
-            $table->string('code', 6)->unique();
-            $table->string('attempt', 1);
-            $table->enum('status', ['active', 'time', 'attempt_over']);
+            $table->integer('user_id');
+            $table->string('code');
+            $table->string('attempt')->default(0);
+            $table->string('status');
             $table->timestamps();
         });
     }

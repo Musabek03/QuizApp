@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\WelcomeMail;
 use App\Models\Category;
+use App\Models\User;
+use App\Services\User\Register;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -21,5 +23,10 @@ class TestController extends Controller
         return [
             'success'=> true
         ];
+    }
+
+    public function code(Request $request): Register
+    {
+
     }
 }

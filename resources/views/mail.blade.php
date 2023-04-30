@@ -1,1 +1,1 @@
-<h1>{{$name}} code: {{$code}}</h1>
+<h1>{{$description}} code: {{$code}}</h1>

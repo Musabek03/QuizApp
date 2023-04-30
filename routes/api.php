@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,3 +46,6 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
             Route::delete('/{id}', [CollectionController::class, 'destroy']);
         });
 });
+
+   Route::post('SendCode', [EmailController::class, "SendCode"])->middleware('auth:sanctum');
+   Route::post('VerifyCode', [EmailController::class, "VerifyCode"])->middleware('auth:sanctum');
