@@ -17,10 +17,12 @@ class SendCode extends BaseService
             $id = Auth::id();
             $user = User::where('id',$id)->first();
 
-            if($user->is_premium)
+            if($user->is_premium == 1)
             {
-                return "Sizde premium jagilgan";
-            }
+                return response([
+                   $xabar = "Sizde premium jagilgan",
+
+            ]);}
             else
             {
                 $code = rand(100000,999999);
@@ -38,7 +40,7 @@ class SendCode extends BaseService
                     ])
                 );
                 return [
-                    'success'=> "Kod jiberildi"
+                    $xabar = "Kod jiberildi"
                 ];
             }
 

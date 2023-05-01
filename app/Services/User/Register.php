@@ -44,7 +44,7 @@ class Register extends BaseService
             $code = rand(111111, 999999);
         $userCode = Mail::to($data['email'])->send(
             new WelcomeMail([
-                'name'=> 'Musabekten salem',
+                'description'=> 'Musabekten salem',
                 'code'=> $code
             ])
         );

@@ -16,9 +16,7 @@ class EmailController extends Controller
     {
         try {
             app(SendCode::class)->execute($request->all());
-            return response([
-                'kod jiberildi!'
-            ]);
+            return app(SendCode::class)->execute($request->xabar);
         } catch (ValidationException $exception){
             return $this->respondValidatorFailed($exception->validator);
         }
@@ -28,6 +26,7 @@ class EmailController extends Controller
     {
         try {
             app(Verify::class)->execute($request->all());
+          // return app(Verify::class)->execute($request->dds);
         } catch (ValidationException $exception){
             return $this->respondValidatorFailed($exception->validator);
         }

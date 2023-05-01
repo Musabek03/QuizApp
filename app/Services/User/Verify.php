@@ -33,30 +33,30 @@ class Verify extends BaseService
             $attempt++;
 
             if($waqit < $h_waqit ){
-                $str = "kod waqti pitip qaldi";
+                $dds = "kod waqti pitip qaldi";
 
             }
             elseif($attempt >5)
             {
-                $str =  "urinislar sani 5ewden asip ketti";
+                $dds =  "urinislar sani 5ewden asip ketti";
             }
             elseif($kod == $manis['code'])
             {
-                $str = "duris";
+                $dds = "duris";
             }
             else
             {
-             $str = "manis joq";
+             $dds = "manis joq";
             }
             VerifyCode::find($manis['id'])->update([
                 'attempt' =>$attempt,
-                'status' => $str
+                'status' => $dds
             ]);
 
-            if($str == "kod waqti pitip qaldi" || $str == "urinislar sani 5ewden asip ketti"  ){
+            if($dds == "kod waqti pitip qaldi" || $dds == "urinislar sani 5ewden asip ketti"  ){
                 VerifyCode::find($manis['id'])->delete();
             }
-            if($str == "duris")
+            if($dds == "duris")
             {
                 User::find($user_id)->update([
                     'is_premium' => true
@@ -66,10 +66,10 @@ class Verify extends BaseService
         }
         else
         {
-            $str = "user tabilmadi";
+            $dds = "user tabilmadi";
         }
     return response([
-        "xabar" => $str,
+         $dds,
     ]);
     }
 }
