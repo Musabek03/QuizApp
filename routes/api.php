@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -40,7 +41,8 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
         ->group(function () {
             Route::post('/', [CategoryController::class, 'store']);
             Route::put('/{id}', [CategoryController::class, 'update']);
-            Route::delete('/{id}', [CategoryController::class, 'destroy']);
+            Route::delete('/{id}', [CategoryController::class, 'delete
+            ']);
         });
     Route::prefix('/collections')
         ->group(function () {
@@ -49,22 +51,42 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
             Route::delete('/{id}', [CollectionController::class, 'destroy']);
         });
 });
+    Route::middleware(['auth:sanctum', 'ability:user,admin'])->group(function (){
+        Route::post('SendCode', [EmailController::class, "SendCode"]);
+        Route::post('VerifyCode', [EmailController::class, "VerifyCode"]);
+    });
 
-   Route::post('SendCode', [EmailController::class, "SendCode"])->middleware('auth:sanctum');
-   Route::post('VerifyCode', [EmailController::class, "VerifyCode"])->middleware('auth:sanctum');
+    Route::prefix('/question')
+        ->group(function ()
+    {
+        Route::get('/Index', [QuestionController::class, "index"]);
+        Route::get('/Show/{id}', [QuestionController::class, "show"]);
+    });
 
-   Route::get('IndexQuestion', [QuestionController::class, "index"])->middleware(['auth:sanctum', 'abilities:admin']);
-   Route::get('ShowQuestion/{id}', [QuestionController::class, "show"]);
-   Route::post('storeQuestion', [QuestionController::class, "store"]);
-   Route::post('updateQuestion/{id}', [QuestionController::class, "update"]);
-   Route::delete('DestroyQuestion/{id}', [QuestionController::class, "destroy"]);
+    Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/question')
+        ->group(function()
+    {
+        Route::post('/storeResult', [QuestionController::class, "store"]);
+        Route::post('/update/{id}', [QuestionController::class, "update"]);
+        Route::delete('/Destroy/{id}', [QuestionController::class, "destroy"]);
+    });
 
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/answer')
+    ->group(function () {
+        Route::post('/Store', [AnswerController::class, "store"]);
+        Route::delete('/Destroy/{id}', [AnswerController::class, "destroy"]);
+    });
 
-   Route::post('StoreAnswer', [AnswerController::class, "store"]);
-   Route::delete('DestroyDelete/{id}', [AnswerController::class, "destroy"]);
+Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('/allowed')
+    ->group(function () {
+        Route::post('/Store', [AllowedController::class, "store"]);
+        Route::delete('/Destroy/{id}', [AllowedController::class, "destroy"]);
+    });
 
+    Route::prefix('/result')
+        ->group(function ()
+    {
+        Route::get('/index',[ResultController::class,"index"]);
+        Route::get('/statistics', [ResultController::class, "statistics"]);
+    });
 
-   Route::post('AllowedStore',[AllowedController::class, "store"] );
-   Route::delete('DestroyAllowed/{id}', [AllowedController::class, "destroy"]);
-
-   Route::get('IndexUser',[\App\Http\Controllers\ResultController::class,"index"]);

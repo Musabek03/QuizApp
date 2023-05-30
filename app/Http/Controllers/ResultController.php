@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Result\ResultCollection;
 use App\Services\Result\IndexResult;
+use App\Services\Result\StatisticsResult;
+use App\Services\Result\storeResult;
 use App\Traits\JsonRespondController;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -26,4 +28,22 @@ class ResultController extends Controller
             return $this->respondNotFound();
         }
     }
+
+    public function statistics(Request $request, string $collection_id, string $question_id)
+    {
+        try {
+            app(StatisticsResult::class)->execute([
+                'collection_id' => $collection_id,
+                'question_id' => $question_id,
+                'answer_id' => $request->answer_id,
+                'is_correct' =>$request->is_correct,
+            ]);
+            return $this->respondSuccess();
+        }catch (ValidationException $exception){
+            return $this->respondValidatorFailed($exception->validator);
+        }
+    }
+
+
+
 }

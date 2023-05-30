@@ -24,7 +24,6 @@ class DeleteCategory extends BaseService
         $this->validate($data);
 
         $categories =Category::find($data['id']);
-
         $categories->delete();
         return true;
     }
