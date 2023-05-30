@@ -12,6 +12,7 @@ class Answer extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'question_id',
         'answer',
         'is_correct',
@@ -20,4 +21,5 @@ class Answer extends Model
     protected $casts = [
         'is_correct'=> 'boolean'
     ];
+
 }

@@ -41,18 +41,19 @@ class Register extends BaseService
             'is_admin'=> false,
         ]);
         $token = $user->createToken('user model', ['user'])->plainTextToken;
-            $code = rand(111111, 999999);
-        $userCode = Mail::to($data['email'])->send(
-            new WelcomeMail([
-                'description'=> 'Musabekten salem',
-                'code'=> $code
-            ])
-        );
+//            $code = rand(111111, 999999);
+//        $userCode = Mail::to($data['email'])->send(
+//            new WelcomeMail([
+//                'description'=> 'Musabekten salem',
+//                'code'=> $code
+//            ])
+//        );
+
 //        $verify_code = Verify::create([
 //            'code' => $code
 //        ]);
        // DB::table('verify_codes')->insert($verify_code);
-        return [$user, $token, $userCode];
+        return [$user, $token];
     }
 
 

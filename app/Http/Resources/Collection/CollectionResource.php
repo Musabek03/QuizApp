@@ -19,6 +19,7 @@ class CollectionResource extends JsonResource
             'description'=> $this->description,
             'user'=> new UserResource($this->user),
             'allowed_type' =>$this->allowed_type,
+            'allowed_users' =>UserResource::collection($this->allowedUsers),
             'created_at' => $this->created_at->format('Y-m-d H:i:s')
         ];
     }

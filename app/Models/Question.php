@@ -14,6 +14,8 @@ class Question extends Model
         'collection_id',
         'question',
         'correct_answers',
+        'created_at',
+        'updated_at'
     ];
 
     public function answers(): HasMany

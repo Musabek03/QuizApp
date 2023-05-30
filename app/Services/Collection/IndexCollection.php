@@ -18,11 +18,10 @@ public function execute(array $data)
 {
 
     $this->validate($data);
-
     return Collection::with('user')->when($data['search']?? null, function ($query, $search){
         $query ->$search($search);
     })->paginate(15);
-    }
+   }
 
 
 

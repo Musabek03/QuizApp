@@ -25,6 +25,7 @@ class CollectionWithQuestionsResource extends JsonResource
             'description' => $this->description,
             'user' => new UserResource($this->user),
             'allowed_type' => $this->allowed_type,
+            'allowed_users' => \App\Http\Resources\Category\UserResource::collection($this->allowedUsers),
             'questions' => QuestionResource::collection($this->questions),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

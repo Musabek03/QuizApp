@@ -26,11 +26,11 @@ class StoreCollection extends BaseService
          "questions.*.answers" => "required_unless:questions,null",
          "questions.*.answers.*.answer" => "required_unless:questions,null",
          "questions.*.answers.*.is_correct" => "required_unless:questions,null|boolean",
-         "allowed_users"=> "required_unless:allowed_type,public,url|array"
+         "allowed_users"=> "required_unless:allowed_type,public,url,|array"
      ];
  }
 
- public function execute(array $data):bool
+ public function execute(array $data)
  {
      $this->validate($data);
      $collection =Collection::create([
@@ -41,6 +41,21 @@ class StoreCollection extends BaseService
          'code' => Str::uuid(),
          'allowed_type' => $data['allowed_type'],
      ]);
+
+     if($data['allowed_type'] == 'limitedUsers'){
+         $allowedUser = [] ;
+             foreach ($data['allowed_users'] as $id)
+                 $allowedUser[] =   [
+             'collection_id' => $collection->id,
+             'user_id' => $id,
+             'created_at' => now(),
+             'updated_at' => now()
+         ];
+         DB::table('allowed_users')->insert($allowedUser);
+         unset($allowedUser);
+     }
+
+
      foreach ($data['questions'] as $question){
          $answers = collect($question['answers']);
          $question = Question::create([

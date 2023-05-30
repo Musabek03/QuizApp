@@ -28,6 +28,8 @@ class ShowCollection extends BaseService
         $collection =Collection::findOrFail($data['id']);
         $questions =$collection->questions;
 
+
+
         return [$collection, $questions];
     }
 }

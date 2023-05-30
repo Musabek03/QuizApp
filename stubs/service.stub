@@ -1,0 +1,25 @@
+<?php
+
+namespace {{namespace}};
+
+
+use App\Services\BaseService;
+
+class {{class}} extends BaseService
+{
+public function rules(): array
+{
+    return [];
+}
+
+public function execute(array $data)
+{
+
+    $this->validate($data);
+
+
+    }
+
+
+
+}

@@ -10,8 +10,10 @@ class AnswerResource extends  JsonResource
     public function  toArray(Request $request): array
     {
         return [
+            'question_id'=>$this->question_id,
             'id'=> $this->id,
-            'answer'=> $this->answer
+            'answer'=> $this->answer,
+           'is_correct' => $this->is_correct
         ];
     }
 }

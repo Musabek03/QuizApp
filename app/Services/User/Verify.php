@@ -18,6 +18,7 @@ class Verify extends BaseService
         ];
     }
 
+
     public function execute($data)
     {
         $user_id = Auth::id();
@@ -69,7 +70,7 @@ class Verify extends BaseService
             $dds = "user tabilmadi";
         }
     return response([
-         $dds,
+         $dds
     ]);
     }
 }
